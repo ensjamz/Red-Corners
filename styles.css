@@ -1,4 +1,4 @@
-/* Centering and mobile responsiveness */
+/* General styling and centering */
 html, body {
     height: 100%;
     margin: 0;
@@ -18,6 +18,7 @@ html, body {
     max-height: 800px;
 }
 
+/* Spinner */
 .spinner-container {
     position: absolute;
     top: 50%;
@@ -34,7 +35,7 @@ html, body {
     animation: spin 3s linear infinite;
 }
 
-/* Position the buttons in the corners */
+/* Corner Buttons Positioned Properly */
 .corners {
     position: relative;
     width: 100%;
@@ -53,40 +54,40 @@ html, body {
 }
 
 #top-left {
-    top: 20px;
-    left: 20px;
+    top: 10px;
+    left: 10px;
 }
 
 #top-right {
-    top: 20px;
-    right: 20px;
+    top: 10px;
+    right: 10px;
 }
 
 #bottom-left {
-    bottom: 20px;
-    left: 20px;
+    bottom: 10px;
+    left: 10px;
 }
 
 #bottom-right {
-    bottom: 20px;
-    right: 20px;
+    bottom: 10px;
+    right: 10px;
 }
 
-/* Scoreboard styling */
+/* Scoreboard Styling */
 .score-board {
     position: absolute;
-    bottom: 20px;
+    top: 10px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 24px;
     font-weight: bold;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px 40px; /* Adjusted width */
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 15px 60px; /* Adjusted width */
     border-radius: 10px;
     color: #00ff00; /* Neon green */
 }
 
-/* Upload and buttons */
+/* Continue and Restart Buttons */
 .upload-section {
     position: absolute;
     top: 20px;
@@ -110,9 +111,17 @@ html, body {
 
 #continueButton {
     position: absolute;
-    top: 50%;
+    top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
+    display: none;
+}
+
+#restartButton {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     display: none;
 }
 
