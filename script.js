@@ -1,92 +1,83 @@
-let selectedCorner = null;
-let score = 0;
-let spinsLeft = 10;
-
-// Spinner rotation angle
-let currentAngle = 0;
-
-const spinnerImage = document.getElementById("spinnerImage");
-const spinCountDisplay = document.getElementById("spinCount");
-const scoreDisplay = document.getElementById("scoreDisplay");
-const restartButton = document.getElementById("restartButton");
-const uploadPhoto = document.getElementById("uploadPhoto");
-const startGameButton = document.getElementById("startGame");
-
-// Corner buttons event listener
-document.querySelectorAll('.corner-btn').forEach(button => {
-    button.addEventListener('click', (e) => {
-        selectedCorner = parseInt(e.target.dataset.corner);
-        spinSpinner();
-    });
-});
-
-// Spin spinner logic
-function spinSpinner() {
-    if (spinsLeft > 0 && selectedCorner !== null) {
-        const randomAngle = Math.floor(Math.random() * 360);
-        currentAngle = (currentAngle + randomAngle) % 360;
-        spinnerImage.style.transform = `rotate(${currentAngle}deg)`;
-        const pointedCorner = getPointedCorner(currentAngle);
-
-        if (selectedCorner !== pointedCorner) {
-            score++;
-        }
-
-        spinsLeft--;
-        updateGameStatus();
-
-        if (spinsLeft === 0) {
-            displayFinalScore();
-        }
-    }
+/* Basic styling for the game */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom right, #ffcccc, #ff6666);
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
-// Determine which corner is pointed at based on angle
-function getPointedCorner(angle) {
-    if (angle >= 0 && angle < 90) return 1; // Top Left
-    if (angle >= 90 && angle < 180) return 2; // Top Right
-    if (angle >= 180 && angle < 270) return 3; // Bottom Left
-    return 4; // Bottom Right
+.game-container {
+    text-align: center;
+    position: relative;
 }
 
-// Update the game status
-function updateGameStatus() {
-    spinCountDisplay.textContent = `Spins left: ${spinsLeft}`;
-    scoreDisplay.textContent = `Score: ${score}`;
+.spinner-container {
+    position: relative;
+    height: 200px;
+    width: 200px;
+    margin: 20px auto;
 }
 
-// Display the final score and show the restart button
-function displayFinalScore() {
-    const percentScore = (score / 10) * 100;
-    scoreDisplay.textContent = `FINAL SCORE: ${percentScore}%`;
-    restartButton.style.display = "block";
+#spinnerImage {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    animation: spin 3s linear infinite;
 }
 
-// Restart the game
-restartButton.addEventListener('click', () => {
-    score = 0;
-    spinsLeft = 10;
-    selectedCorner = null;
-    restartButton.style.display = "none";
-    updateGameStatus();
-});
+.corners {
+    display: flex;
+    justify-content: space-between;
+    margin: 40px;
+}
 
-// Handle photo upload
-uploadPhoto.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
+.corner-btn {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid red;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-    reader.onload = function(event) {
-        spinnerImage.src = event.target.result;
-        spinnerImage.style.display = 'block';
-    };
+.corner-btn:hover {
+    background-color: #ffcccc;
+}
 
-    reader.readAsDataURL(file);
-});
+.score-board {
+    margin: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 10px;
+}
 
-// Start game event listener
-startGameButton.addEventListener('click', () => {
-    if (spinnerImage.src) {
-        spinSpinner();
-    }
-});
+.upload-section {
+    margin: 20px;
+}
+
+#continueButton, #restartButton {
+    padding: 10px;
+    background-color: #ff6666;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+#continueButton:hover, #restartButton:hover {
+    background-color: #ff3333;
+}
+
+#statusMessage {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}
