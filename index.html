@@ -3,13 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Red Corners</title>
+    <title>Four Corners Spinner Game</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="corner top-left"></div>
-    <div class="corner top-right"></div>
-    <div class="corner bottom-left"></div>
-    <div class="corner bottom-right"></div>
+    <div class="game-container">
+        <!-- Spinner Area -->
+        <div class="spinner-container">
+            <img id="spinnerImage" src="" alt="Spinner Image">
+        </div>
+
+        <!-- Corner Buttons -->
+        <div class="corners">
+            <button class="corner-btn" id="top-left" data-corner="1">Top Left</button>
+            <button class="corner-btn" id="top-right" data-corner="2">Top Right</button>
+            <button class="corner-btn" id="bottom-left" data-corner="3">Bottom Left</button>
+            <button class="corner-btn" id="bottom-right" data-corner="4">Bottom Right</button>
+        </div>
+
+        <!-- Score Display -->
+        <div class="score-board">
+            <p id="spinCount">Spins left: 10</p>
+            <p id="scoreDisplay">Score: 0</p>
+        </div>
+
+        <!-- Upload Photo -->
+        <div class="upload-section">
+            <input type="file" id="uploadPhoto" accept="image/*">
+            <button id="startGame">Start Game</button>
+        </div>
+
+        <!-- Restart Button -->
+        <button id="restartButton" style="display: none;">Restart Game</button>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
