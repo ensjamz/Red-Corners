@@ -78,6 +78,12 @@ function getCorner(x, y, screenWidth, screenHeight) {
     if (x < screenWidth / 2 && y < screenHeight / 2) return 1; // Top Left
     if (x >= screenWidth / 2 && y < screenHeight / 2) return 2; // Top Right
     if (x < screenWidth / 2 && y >= screenHeight / 2) return 3; // Bottom Left
+    return 4;
+    // Find out which corner the spinner image lands in based on coordinates
+function getCorner(x, y, screenWidth, screenHeight) {
+    if (x < screenWidth / 2 && y < screenHeight / 2) return 1; // Top Left
+    if (x >= screenWidth / 2 && y < screenHeight / 2) return 2; // Top Right
+    if (x < screenWidth / 2 && y >= screenHeight / 2) return 3; // Bottom Left
     return 4; // Bottom Right
 }
 
@@ -119,3 +125,14 @@ uploadPhoto.addEventListener('change', (e) => {
     reader.onload = function(event) {
         spinnerImage.src = event.target.result;
         spinnerImage.style.display = 'block';
+    };
+
+    reader.readAsDataURL(file);
+});
+
+// Start game event listener
+startGameButton.addEventListener('click', () => {
+    if (spinnerImage.src) {
+        bounceSpinner();
+    }
+});
