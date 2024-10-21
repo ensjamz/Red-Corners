@@ -28,7 +28,7 @@ document.querySelectorAll('.corner-btn').forEach(button => {
 function bounceSpinner() {
     if (bouncing) return;
     bouncing = true;
-    let x = 0, y = 0, dx = 5, dy = 5;
+    let x = 0, y = 0, dx = (Math.random() * 10) + 3, dy = (Math.random() * 10) + 3;
 
     movementInterval = setInterval(() => {
         let screenWidth = window.innerWidth - 200;
@@ -40,12 +40,13 @@ function bounceSpinner() {
 
         spinnerImage.style.transform = `translate(${x}px, ${y}px)`;
 
-        if (Math.abs(dx) < 1 && Math.abs(dy) < 1) {
+        // Slow down and stop the movement when it's time to land in a corner
+        if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) {
             clearInterval(movementInterval);
             bouncing = false;
             resolveSpin(x, y, screenWidth, screenHeight);
         } else {
-            dx *= 0.98;
+            dx *= 0.98;  // Reduce the speed to eventually stop
             dy *= 0.98;
         }
     }, 20);
@@ -118,14 +119,3 @@ uploadPhoto.addEventListener('change', (e) => {
     reader.onload = function(event) {
         spinnerImage.src = event.target.result;
         spinnerImage.style.display = 'block';
-    };
-
-    reader.readAsDataURL(file);
-});
-
-// Start game event listener
-startGameButton.addEventListener('click', () => {
-    if (spinnerImage.src) {
-        bounceSpinner();
-    }
-});
