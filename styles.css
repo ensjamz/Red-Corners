@@ -28,11 +28,6 @@ body {
     animation: spin 3s linear infinite;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
 .corners {
     display: flex;
     justify-content: space-between;
@@ -67,15 +62,22 @@ body {
     margin: 20px;
 }
 
-#restartButton {
+#continueButton, #restartButton {
     padding: 10px;
     background-color: #ff6666;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin: 10px;
 }
 
-#restartButton:hover {
+#continueButton:hover, #restartButton:hover {
     background-color: #ff3333;
+}
+
+#statusMessage {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
 }
