@@ -1,55 +1,81 @@
-/* Reset default browser styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    height: 100%;
-    width: 100%;
+/* Basic styling for the game */
+body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white;
+    height: 100vh;
+    background: linear-gradient(to bottom right, #ffcccc, #ff6666);
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
-body {
+.game-container {
+    text-align: center;
     position: relative;
 }
 
-.corner {
-    width: 20px;
-    height: 20px;
-    background-color: red;
-    position: absolute;
+.spinner-container {
+    position: relative;
+    height: 200px;
+    width: 200px;
+    margin: 20px auto;
 }
 
-/* Position the corners */
-.top-left {
-    top: 0;
-    left: 0;
+#spinnerImage {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    animation: spin 3s linear infinite;
 }
 
-.top-right {
-    top: 0;
-    right: 0;
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-.bottom-left {
-    bottom: 0;
-    left: 0;
+.corners {
+    display: flex;
+    justify-content: space-between;
+    margin: 40px;
 }
 
-.bottom-right {
-    bottom: 0;
-    right: 0;
+.corner-btn {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid red;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-/* Ensure it is responsive on mobile */
-@media only screen and (max-width: 600px) {
-    .corner {
-        width: 10px;
-        height: 10px;
-    }
+.corner-btn:hover {
+    background-color: #ffcccc;
+}
+
+.score-board {
+    margin: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.upload-section {
+    margin: 20px;
+}
+
+#restartButton {
+    padding: 10px;
+    background-color: #ff6666;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#restartButton:hover {
+    background-color: #ff3333;
 }
