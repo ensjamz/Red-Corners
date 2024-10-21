@@ -53,23 +53,23 @@ html, body {
 }
 
 #top-left {
-    top: 0;
-    left: 0;
+    top: 20px;
+    left: 20px;
 }
 
 #top-right {
-    top: 0;
-    right: 0;
+    top: 20px;
+    right: 20px;
 }
 
 #bottom-left {
-    bottom: 0;
-    left: 0;
+    bottom: 20px;
+    left: 20px;
 }
 
 #bottom-right {
-    bottom: 0;
-    right: 0;
+    bottom: 20px;
+    right: 20px;
 }
 
 /* Scoreboard styling */
@@ -78,10 +78,10 @@ html, body {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
     background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
+    padding: 10px 40px; /* Adjusted width */
     border-radius: 10px;
     color: #00ff00; /* Neon green */
 }
@@ -95,17 +95,30 @@ html, body {
 }
 
 #continueButton, #restartButton {
-    padding: 10px;
+    padding: 20px;
     background-color: #00ff00; /* Neon green */
     color: #000;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin: 10px;
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: bold;
+    box-shadow: 0px 0px 15px 5px rgba(0, 255, 0, 0.7); /* Neon shadow */
+}
+
+#continueButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
 }
 
 #continueButton:hover, #restartButton:hover {
     background-color: #ff00ff; /* Neon pink */
+    box-shadow: 0px 0px 15px 5px rgba(255, 0, 255, 0.7); /* Neon pink shadow */
 }
 
 /* Animation for the spinner */
