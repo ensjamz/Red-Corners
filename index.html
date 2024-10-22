@@ -50,16 +50,22 @@
             background-color: #ff00ff;
             color: white;
         }
+
+        #uploadPhoto {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="controls">
-        <button id="topLeft">Top Left</button>
-        <button id="topRight">Top Right</button>
-        <button id="bottomLeft">Bottom Left</button>
-        <button id="bottomRight">Bottom Right</button>
+        <button id="topLeft">(1) Top Left</button>
+        <button id="topRight">(2) Top Right</button>
+        <button id="bottomLeft">(3) Bottom Left</button>
+        <button id="bottomRight">(4) Bottom Right</button>
+        <input type="file" id="uploadPhoto" accept="image/*">
     </div>
     <div class="score" id="scoreBoard">Score: 0</div>
+    <button id="continueButton" style="display:none">Continue</button>
     <script src="script.js"></script>
 </body>
 </html>
