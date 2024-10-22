@@ -4,19 +4,51 @@ let rounds = 10;
 let spinnerX, spinnerY;
 let dx, dy;
 let isMoving = false;
+let img;
+let gamePaused = true;
 
 function setup() {
     createCanvas(400, 400);
     resetSpinner();
+    // Disable loop initially; only spin when the game is running
+    noLoop();
+
+    // Handle image upload
+    const uploadPhoto = document.getElementById("uploadPhoto");
+    uploadPhoto.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+            img = loadImage(event.target.result);
+            resetSpinner();
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Continue button click event
+    document.getElementById('continueButton').addEventListener('click', () => {
+        if (!isMoving && rounds > 0) {
+            resetSpinner();
+            document.getElementById('continueButton').style.display = 'none';
+            gamePaused = false;
+            loop();
+        }
+    });
 }
 
 function draw() {
     background(0);
-    fill(255, 0, 0);
-    ellipse(spinnerX, spinnerY, 50, 50);  // The "spinner"
 
-    // Move spinner
-    if (isMoving) {
+    if (img) {
+        image(img, spinnerX - 25, spinnerY - 25, 50, 50);  // Draw the uploaded image as the spinner
+    } else {
+        fill(255, 0, 0);
+        ellipse(spinnerX, spinnerY, 50, 50);  // Placeholder circle if no image is uploaded
+    }
+
+    // Move spinner if the game isn't paused
+    if (!gamePaused) {
         spinnerX += dx;
         spinnerY += dy;
 
@@ -38,11 +70,13 @@ function resetSpinner() {
     dx = random(-5, 5);
     dy = random(-5, 5);
     isMoving = true;
+    gamePaused = false;
 }
 
 // Stop spinner and check if it landed in the selected corner
 function stopSpinner() {
     isMoving = false;
+    noLoop();  // Stop the animation loop temporarily
     checkResult();
 }
 
@@ -62,7 +96,8 @@ function checkResult() {
     // Move to the next round
     rounds--;
     if (rounds > 0) {
-        resetSpinner();
+        document.getElementById('continueButton').style.display = 'block';  // Show continue button
+        gamePaused = true;
     } else {
         document.getElementById("scoreBoard").innerText = `Game Over! Final Score: ${score}`;
     }
@@ -95,7 +130,7 @@ document.getElementById('bottomRight').addEventListener('click', () => {
 });
 
 function startSpinner() {
-    if (!isMoving) {
-        resetSpinner();
+    if (!isMoving && !gamePaused && img) {
+        loop();  // Start the animation loop
     }
 }
