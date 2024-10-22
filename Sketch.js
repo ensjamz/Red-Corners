@@ -1,136 +1,100 @@
-let selectedCorner = null;
-let score = 0;
-let rounds = 10;
-let spinnerX, spinnerY;
-let dx, dy;
-let isMoving = false;
 let img;
-let gamePaused = true;
+let imgFile;
+let imgCircle = { x: 0, y: 0, size: 100, angle: 0, speedX: 2, speedY: 2 };
+let zooming = false;
+let zoomTime = 0;
+let circleDiameter = 100;
 
 function setup() {
-    createCanvas(400, 400);
-    resetSpinner();
-    // Disable loop initially; only spin when the game is running
-    noLoop();
+  createCanvas(windowWidth, windowHeight);
+  imageMode(CENTER);
+  noStroke();
+  
+  // File input handling
+  const fileInput = document.getElementById('imageUpload');
+  fileInput.addEventListener('change', handleFile);
+  
+  imgCircle.x = random(width);
+  imgCircle.y = random(height);
+}
 
-    // Handle image upload
-    const uploadPhoto = document.getElementById("uploadPhoto");
-    uploadPhoto.addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-
-        reader.onload = function(event) {
-            img = loadImage(event.target.result);
-            resetSpinner();
-        };
-        reader.readAsDataURL(file);
+function handleFile(event) {
+  const file = event.target.files[0];
+  if (file && file.type.startsWith('image/')) {
+    imgFile = createImg(URL.createObjectURL(file), '', '', () => {
+      img = loadImage(imgFile.elt.src);
+      imgFile.hide();
     });
-
-    // Continue button click event
-    document.getElementById('continueButton').addEventListener('click', () => {
-        if (!isMoving && rounds > 0) {
-            resetSpinner();
-            document.getElementById('continueButton').style.display = 'none';
-            gamePaused = false;
-            loop();
-        }
-    });
+  }
 }
 
 function draw() {
-    background(0);
+  background(200);
 
-    if (img) {
-        image(img, spinnerX - 25, spinnerY - 25, 50, 50);  // Draw the uploaded image as the spinner
-    } else {
-        fill(255, 0, 0);
-        ellipse(spinnerX, spinnerY, 50, 50);  // Placeholder circle if no image is uploaded
+  if (img) {
+    if (!zooming) {
+      // Update circle movement and rotation
+      imgCircle.x += imgCircle.speedX;
+      imgCircle.y += imgCircle.speedY;
+      imgCircle.angle += 0.01;
+
+      // Check for bouncing
+      if (imgCircle.x - circleDiameter / 2 < 0 || imgCircle.x + circleDiameter / 2 > width) {
+        imgCircle.speedX *= -1;
+      }
+      if (imgCircle.y - circleDiameter / 2 < 0 || imgCircle.y + circleDiameter / 2 > height) {
+        imgCircle.speedY *= -1;
+      }
     }
 
-    // Move spinner if the game isn't paused
-    if (!gamePaused) {
-        spinnerX += dx;
-        spinnerY += dy;
+    // Apply zoom effect if zooming
+    if (zooming) {
+      circleDiameter = lerp(circleDiameter, width / 2, 0.1);
+      imgCircle.x = lerp(imgCircle.x, width / 2, 0.1);
+      imgCircle.y = lerp(imgCircle.y, height / 2, 0.1);
+      zoomTime += deltaTime;
 
-        // Bounce off edges
-        if (spinnerX < 25 || spinnerX > width - 25) dx *= -1;
-        if (spinnerY < 25 || spinnerY > height - 25) dy *= -1;
-
-        // Stop after moving for some time
-        if (frameCount % 60 == 0) {
-            stopSpinner();
-        }
-    }
-}
-
-// Set up spinner's random movement
-function resetSpinner() {
-    spinnerX = width / 2;
-    spinnerY = height / 2;
-    dx = random(-5, 5);
-    dy = random(-5, 5);
-    isMoving = true;
-    gamePaused = false;
-}
-
-// Stop spinner and check if it landed in the selected corner
-function stopSpinner() {
-    isMoving = false;
-    noLoop();  // Stop the animation loop temporarily
-    checkResult();
-}
-
-// Check if the spinner is in the selected corner
-function checkResult() {
-    let landedCorner = getCorner(spinnerX, spinnerY);
-
-    if (landedCorner === selectedCorner) {
-        // If the spinner lands in the selected corner, no points
-        document.getElementById("scoreBoard").innerText = `No Points! Score: ${score}`;
-    } else {
-        // Award 1 point if it doesn't land in the selected corner
-        score++;
-        document.getElementById("scoreBoard").innerText = `1 Point! Score: ${score}`;
+      if (zoomTime > 3000) {
+        zooming = false;
+        zoomTime = 0;
+        circleDiameter = 100;
+      }
     }
 
-    // Move to the next round
-    rounds--;
-    if (rounds > 0) {
-        document.getElementById('continueButton').style.display = 'block';  // Show continue button
-        gamePaused = true;
-    } else {
-        document.getElementById("scoreBoard").innerText = `Game Over! Final Score: ${score}`;
-    }
+    // Draw circular image
+    push();
+    translate(imgCircle.x, imgCircle.y);
+    rotate(imgCircle.angle);
+
+    // Make the image circular by applying a mask
+    let imgRadius = circleDiameter / 2;
+    clipCircle(imgCircle.x, imgCircle.y, imgRadius);
+    image(img, 0, 0, circleDiameter, circleDiameter);
+    noClip(); // Turn off the mask
+
+    pop();
+  }
 }
 
-// Determine which corner the spinner lands in
-function getCorner(x, y) {
-    if (x < width / 2 && y < height / 2) return 'topLeft';
-    if (x >= width / 2 && y < height / 2) return 'topRight';
-    if (x < width / 2 && y >= height / 2) return 'bottomLeft';
-    return 'bottomRight';
+function mousePressed() {
+  // Detect if the image is touched
+  const distanceToCircle = dist(mouseX, mouseY, imgCircle.x, imgCircle.y);
+  if (distanceToCircle < circleDiameter / 2) {
+    zooming = true;
+  }
 }
 
-// Button click event listeners to select the corner
-document.getElementById('topLeft').addEventListener('click', () => {
-    selectedCorner = 'topLeft';
-    startSpinner();
-});
-document.getElementById('topRight').addEventListener('click', () => {
-    selectedCorner = 'topRight';
-    startSpinner();
-});
-document.getElementById('bottomLeft').addEventListener('click', () => {
-    selectedCorner = 'bottomLeft';
-    startSpinner();
-});
-document.getElementById('bottomRight').addEventListener('click', () => {
-    selectedCorner = 'bottomRight';
-    startSpinner();
-});
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
 
-function startSpinner() {
-    if (!isMoving && !gamePaused && img) {
-        loop();  // Start the animation loop
-    }
+// Function to clip the image into a circle
+function clipCircle(x, y, radius) {
+  beginShape();
+  for (let a = 0; a < TWO_PI; a += 0.01) {
+    let sx = x + cos(a) * radius;
+    let sy = y + sin(a) * radius;
+    vertex(sx, sy);
+  }
+  endShape(CLOSE);
 }
