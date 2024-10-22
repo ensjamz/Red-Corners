@@ -72,6 +72,7 @@ function resolveSpin(x, y, screenWidth, screenHeight) {
         continueButton.style.display = "block";
     }
 }
+
 // Find out which corner the spinner image lands in based on coordinates
 function getCorner(x, y, screenWidth, screenHeight) {
     if (x < screenWidth / 2 && y < screenHeight / 2) return 1; // Top Left
@@ -96,7 +97,7 @@ function displayFinalScore() {
 // Continue the game (bring spinner back to the center)
 continueButton.addEventListener('click', () => {
     spinnerImage.style.transform = `translate(0px, 0px)`;
-    spinnerImage.style.animation = 'spin 3s linear infinite';
+    spinnerImage.style.animation = 'spin 3s linear infinite'; // Reset spinning animation
     continueButton.style.display = "none";
     statusMessage.textContent = '';
 });
@@ -117,7 +118,7 @@ uploadPhoto.addEventListener('change', (e) => {
 
     reader.onload = function(event) {
         spinnerImage.src = event.target.result;
-        spinnerImage.style.display = 'block';
+        spinnerImage.style.display = 'block'; // Show the uploaded image
     };
 
     reader.readAsDataURL(file);
