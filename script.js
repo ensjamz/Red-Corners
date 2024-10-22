@@ -10,7 +10,7 @@ const statusMessage = document.getElementById("statusMessage");
 const restartButton = document.getElementById("restartButton");
 const continueButton = document.getElementById("continueButton");
 const uploadPhoto = document.getElementById("uploadPhoto");
-const startGameButton = document.getElementById("startGame");
+const uploadSection = document.getElementById("uploadSection");
 
 let movementInterval = null;
 
@@ -100,6 +100,7 @@ continueButton.addEventListener('click', () => {
     spinnerImage.style.animation = 'spin 3s linear infinite'; // Reset spinning animation
     continueButton.style.display = "none";
     statusMessage.textContent = '';
+    bounceSpinner(); // Continue the game after each round
 });
 
 // Restart the game
@@ -119,14 +120,22 @@ uploadPhoto.addEventListener('change', (e) => {
     reader.onload = function(event) {
         spinnerImage.src = event.target.result;
         spinnerImage.style.display = 'block'; // Show the uploaded image
+        uploadSection.style.display = 'none'; // Hide the upload section once the image is uploaded
     };
 
     reader.readAsDataURL(file);
 });
 
-// Start game event listener
-startGameButton.addEventListener('click', () => {
-    if (spinnerImage.src) {
-        bounceSpinner();
-    }
+// Start the game automatically after image is uploaded
+uploadPhoto.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+        spinnerImage.src = event.target.result;
+        spinnerImage.style.display = 'block'; // Show the uploaded image
+        bounceSpinner(); // Start the game immediately after upload
+    };
+
+    reader.readAsDataURL(file);
 });
