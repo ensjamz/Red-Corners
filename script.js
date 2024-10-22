@@ -1,141 +1,101 @@
 let selectedCorner = null;
 let score = 0;
-let spinsLeft = 10;
-let bouncing = false;
+let rounds = 10;
+let spinnerX, spinnerY;
+let dx, dy;
+let isMoving = false;
 
-const spinnerImage = document.getElementById("spinnerImage");
-const spinCountDisplay = document.getElementById("spinCount");
-const scoreDisplay = document.getElementById("scoreDisplay");
-const statusMessage = document.getElementById("statusMessage");
-const restartButton = document.getElementById("restartButton");
-const continueButton = document.getElementById("continueButton");
-const uploadPhoto = document.getElementById("uploadPhoto");
-const uploadSection = document.getElementById("uploadSection");
-
-let movementInterval = null;
-
-// Handle corner button click
-document.querySelectorAll('.corner-btn').forEach(button => {
-    button.addEventListener('click', (e) => {
-        if (!bouncing && spinsLeft > 0) {
-            selectedCorner = parseInt(e.target.dataset.corner);
-            bounceSpinner();
-        }
-    });
-});
-
-// Simulate the image bouncing around the screen
-function bounceSpinner() {
-    if (bouncing) return;
-    bouncing = true;
-    let x = 0, y = 0, dx = (Math.random() * 10) + 3, dy = (Math.random() * 10) + 3;
-
-    movementInterval = setInterval(() => {
-        let screenWidth = window.innerWidth - 200;
-        let screenHeight = window.innerHeight - 200;
-        x += dx;
-        y += dy;
-        if (x <= 0 || x >= screenWidth) dx *= -1;
-        if (y <= 0 || y >= screenHeight) dy *= -1;
-
-        spinnerImage.style.transform = `translate(${x}px, ${y}px)`;
-
-        // Slow down and stop the movement when it's time to land in a corner
-        if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) {
-            clearInterval(movementInterval);
-            bouncing = false;
-            resolveSpin(x, y, screenWidth, screenHeight);
-        } else {
-            dx *= 0.98;  // Reduce the speed to eventually stop
-            dy *= 0.98;
-        }
-    }, 20);
+function setup() {
+    createCanvas(400, 400);
+    resetSpinner();
 }
 
-// Determine which corner the image lands in
-function resolveSpin(x, y, screenWidth, screenHeight) {
-    let landedCorner = getCorner(x, y, screenWidth, screenHeight);
+function draw() {
+    background(0);
+    fill(255, 0, 0);
+    ellipse(spinnerX, spinnerY, 50, 50);  // The "spinner"
+
+    // Move spinner
+    if (isMoving) {
+        spinnerX += dx;
+        spinnerY += dy;
+
+        // Bounce off edges
+        if (spinnerX < 25 || spinnerX > width - 25) dx *= -1;
+        if (spinnerY < 25 || spinnerY > height - 25) dy *= -1;
+
+        // Stop after moving for some time
+        if (frameCount % 60 == 0) {
+            stopSpinner();
+        }
+    }
+}
+
+// Set up spinner's random movement
+function resetSpinner() {
+    spinnerX = width / 2;
+    spinnerY = height / 2;
+    dx = random(-5, 5);
+    dy = random(-5, 5);
+    isMoving = true;
+}
+
+// Stop spinner and check if it landed in the selected corner
+function stopSpinner() {
+    isMoving = false;
+    checkResult();
+}
+
+// Check if the spinner is in the selected corner
+function checkResult() {
+    let landedCorner = getCorner(spinnerX, spinnerY);
 
     if (landedCorner === selectedCorner) {
-        statusMessage.textContent = 'No Points';
+        // If the spinner lands in the selected corner, no points
+        document.getElementById("scoreBoard").innerText = `No Points! Score: ${score}`;
     } else {
+        // Award 1 point if it doesn't land in the selected corner
         score++;
-        statusMessage.textContent = '1 Point!';
+        document.getElementById("scoreBoard").innerText = `1 Point! Score: ${score}`;
     }
 
-    spinsLeft--;
-    updateGameStatus();
-
-    if (spinsLeft === 0) {
-        displayFinalScore();
+    // Move to the next round
+    rounds--;
+    if (rounds > 0) {
+        resetSpinner();
     } else {
-        continueButton.style.display = "block";
+        document.getElementById("scoreBoard").innerText = `Game Over! Final Score: ${score}`;
     }
 }
 
-// Find out which corner the spinner image lands in based on coordinates
-function getCorner(x, y, screenWidth, screenHeight) {
-    if (x < screenWidth / 2 && y < screenHeight / 2) return 1; // Top Left
-    if (x >= screenWidth / 2 && y < screenHeight / 2) return 2; // Top Right
-    if (x < screenWidth / 2 && y >= screenHeight / 2) return 3; // Bottom Left
-    return 4; // Bottom Right
+// Determine which corner the spinner lands in
+function getCorner(x, y) {
+    if (x < width / 2 && y < height / 2) return 'topLeft';
+    if (x >= width / 2 && y < height / 2) return 'topRight';
+    if (x < width / 2 && y >= height / 2) return 'bottomLeft';
+    return 'bottomRight';
 }
 
-// Update the game status
-function updateGameStatus() {
-    spinCountDisplay.textContent = `Spins left: ${spinsLeft}`;
-    scoreDisplay.textContent = `Score: ${score}`;
+// Button click event listeners to select the corner
+document.getElementById('topLeft').addEventListener('click', () => {
+    selectedCorner = 'topLeft';
+    startSpinner();
+});
+document.getElementById('topRight').addEventListener('click', () => {
+    selectedCorner = 'topRight';
+    startSpinner();
+});
+document.getElementById('bottomLeft').addEventListener('click', () => {
+    selectedCorner = 'bottomLeft';
+    startSpinner();
+});
+document.getElementById('bottomRight').addEventListener('click', () => {
+    selectedCorner = 'bottomRight';
+    startSpinner();
+});
+
+function startSpinner() {
+    if (!isMoving) {
+        resetSpinner();
+    }
 }
-
-// Display the final score
-function displayFinalScore() {
-    const percentScore = (score / 10) * 100;
-    scoreDisplay.textContent = `FINAL SCORE: ${percentScore}%`;
-    restartButton.style.display = "block";
-}
-
-// Continue the game (bring spinner back to the center)
-continueButton.addEventListener('click', () => {
-    spinnerImage.style.transform = `translate(0px, 0px)`;
-    spinnerImage.style.animation = 'spin 3s linear infinite'; // Reset spinning animation
-    continueButton.style.display = "none";
-    statusMessage.textContent = '';
-    bounceSpinner(); // Continue the game after each round
-});
-
-// Restart the game
-restartButton.addEventListener('click', () => {
-    score = 0;
-    spinsLeft = 10;
-    selectedCorner = null;
-    restartButton.style.display = "none";
-    updateGameStatus();
-});
-
-// Handle photo upload
-uploadPhoto.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = function(event) {
-        spinnerImage.src = event.target.result;
-        spinnerImage.style.display = 'block'; // Show the uploaded image
-        uploadSection.style.display = 'none'; // Hide the upload section once the image is uploaded
-    };
-
-    reader.readAsDataURL(file);
-});
-
-// Start the game automatically after image is uploaded
-uploadPhoto.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = function(event) {
-        spinnerImage.src = event.target.result;
-        spinnerImage.style.display = 'block'; // Show the uploaded image
-        bounceSpinner(); // Start the game immediately after upload
-    };
-
-    reader.readAsDataURL(file);
-});
