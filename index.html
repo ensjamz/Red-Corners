@@ -3,42 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Four Corners Spinner Game</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Spinner Game with p5.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #0f0c29;
+        }
+
+        canvas {
+            border: 3px solid #fff;
+        }
+
+        .controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: sans-serif;
+        }
+
+        .score {
+            position: absolute;
+            bottom: 10px;
+            color: white;
+            font-size: 20px;
+            font-family: sans-serif;
+        }
+
+        button {
+            background-color: #00ff00;
+            color: #000;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 2px solid #ff00ff;
+            margin: 5px;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #ff00ff;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <div class="game-container">
-        <!-- Spinner Area -->
-        <div class="spinner-container">
-            <img id="spinnerImage" src="" alt="Spinner Image" style="display:none">
-        </div>
-
-        <!-- Corner Buttons -->
-        <div class="corners">
-            <button class="corner-btn" id="top-left" data-corner="1">(1)</button>
-            <button class="corner-btn" id="top-right" data-corner="2">(2)</button>
-            <button class="corner-btn" id="bottom-left" data-corner="3">(3)</button>
-            <button class="corner-btn" id="bottom-right" data-corner="4">(4)</button>
-        </div>
-
-        <!-- Score Display -->
-        <div class="score-board" id="scoreBoard">
-            <p id="spinCount">Spins left: 10</p>
-            <p id="scoreDisplay">Score: 0</p>
-            <p id="statusMessage"></p>
-        </div>
-
-        <!-- Upload Photo Section (centered and bigger) -->
-        <div class="upload-section" id="uploadSection">
-            <input type="file" id="uploadPhoto" accept="image/*">
-            <p id="uploadNote">Upload a photo to start the game</p>
-        </div>
-
-        <!-- Continue and Restart Buttons -->
-        <button id="continueButton" style="display: none;">Continue</button>
-        <button id="restartButton" style="display: none;">Restart Game</button>
+    <div class="controls">
+        <button id="topLeft">Top Left</button>
+        <button id="topRight">Top Right</button>
+        <button id="bottomLeft">Bottom Left</button>
+        <button id="bottomRight">Bottom Right</button>
     </div>
-
+    <div class="score" id="scoreBoard">Score: 0</div>
     <script src="script.js"></script>
 </body>
 </html>
