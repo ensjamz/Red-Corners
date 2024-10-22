@@ -1,71 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spinner Game with p5.js</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <style>
-        body {
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: #0f0c29;
-        }
-
-        canvas {
-            border: 3px solid #fff;
-        }
-
-        .controls {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: white;
-            font-family: sans-serif;
-        }
-
-        .score {
-            position: absolute;
-            bottom: 10px;
-            color: white;
-            font-size: 20px;
-            font-family: sans-serif;
-        }
-
-        button {
-            background-color: #00ff00;
-            color: #000;
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            border: 2px solid #ff00ff;
-            margin: 5px;
-            border-radius: 5px;
-        }
-
-        button:hover {
-            background-color: #ff00ff;
-            color: white;
-        }
-
-        #uploadPhoto {
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Floating Picture</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-    <div class="controls">
-        <button id="topLeft">(1) Top Left</button>
-        <button id="topRight">(2) Top Right</button>
-        <button id="bottomLeft">(3) Bottom Left</button>
-        <button id="bottomRight">(4) Bottom Right</button>
-        <input type="file" id="uploadPhoto" accept="image/*">
-    </div>
-    <div class="score" id="scoreBoard">Score: 0</div>
-    <button id="continueButton" style="display:none">Continue</button>
-    <script src="script.js"></script>
+  <input type="file" id="imageUpload" accept="image/*">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <script src="sketch.js"></script>
 </body>
 </html>
