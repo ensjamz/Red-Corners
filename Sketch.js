@@ -7,6 +7,7 @@ function setup() {
     cnv.position(0, 0);
     cnv.style('z-index', '1'); // Behind thumb-area
     noFill();
+    strokeWeight(2);
 }
 
 function draw() {
@@ -14,21 +15,30 @@ function draw() {
 
     // Draw lightning for the duration of the timer
     if (isPressed && millis() - timer < LIGHTNING_DURATION) {
-        for (let i = 0; i < 10; i++) {
-            stroke(255, 255, 0, random(100, 255));
-            strokeWeight(random(2, 5));
-            beginShape();
-            for (let j = 0; i < 5; j++) {
-                let x = random(0, width);
-                let y = random(0, height);
-                vertex(x, y);
-            }
-            endShape();
+        // Create lightning flashes across the screen
+        for (let i = 0; i < 5; i++) {
+            drawLightning(random(width), random(height));
         }
     } else if (isPressed && millis() - timer >= LIGHTNING_DURATION) {
         // Reset after the timer has run out
         resetLightning();
     }
+}
+
+// Function to draw a single lightning bolt at random positions
+function drawLightning(x, y) {
+    let length = random(50, 200);  // Length of the lightning bolt
+    stroke(255, 255, 0, random(100, 255));  // Random yellow shades
+    strokeWeight(random(2, 5));
+    
+    beginShape();
+    vertex(x, y);
+    for (let i = 0; i < 10; i++) {
+        let newX = x + random(-50, 50);  // Random jagged lightning effect
+        let newY = y + random(-50, 50);
+        vertex(newX, newY);
+    }
+    endShape();
 }
 
 // Function to handle touch and mouse press events
@@ -44,14 +54,7 @@ function handlePress() {
     }
 }
 
-// Function to handle the mouse release or touch end event
-function handleRelease() {
-    let thumbArea = document.getElementById('thumb-area');
-    thumbArea.classList.remove('active');
-    isPressed = false;
-}
-
-// Reset function to stop lightning and reset the button state
+// Function to reset the lightning and thumb-area
 function resetLightning() {
     let thumbArea = document.getElementById('thumb-area');
     thumbArea.classList.remove('active');
@@ -67,7 +70,7 @@ function touchStarted() {
 }
 
 function touchEnded() {
-    handleRelease();
+    resetLightning();  // End effect when touch is lifted
 }
 
 function windowResized() {
