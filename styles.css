@@ -1,0 +1,22 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: black;
+}
+
+#thumb-area {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    position: relative;
+    z-index: 2;
+}
+
+#thumb-area.active {
+    box-shadow: 0 0 30px 15px rgba(255, 255, 0, 0.8);
+}
