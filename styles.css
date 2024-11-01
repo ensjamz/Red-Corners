@@ -5,14 +5,19 @@ body, html {
   overflow: hidden;
   font-family: Arial, sans-serif;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .container {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
   background: linear-gradient(to right, #ff8a00, #e52e71);
 }
+
 .zipper {
   position: absolute;
   width: 10px; /* Width of the zipper teeth */
@@ -21,6 +26,7 @@ body, html {
   transition: background-color 0.2s;
   z-index: 10;
 }
+
 .zipper::before {
   content: '';
   position: absolute;
