@@ -14,15 +14,26 @@
 <script>
   const zipper = document.querySelector('.zipper');
   
-  document.addEventListener('mousemove', (e) => {
-    // Move zipper with mouse
-    zipper.style.left = `${e.clientX}px`;
-    
-    // Change colors based on mouse position
-    const hue = Math.floor((e.clientX / window.innerWidth) * 360);
+  function moveZipper(x) {
+    // Set zipper position and color based on the x-coordinate
+    zipper.style.left = `${x}px`;
+    const hue = Math.floor((x / window.innerWidth) * 360);
     zipper.style.backgroundColor = `hsl(${hue}, 80%, 40%)`;
     zipper.style.boxShadow = `inset 0 0 20px hsl(${hue + 20}, 80%, 50%)`;
-  });
+  }
+
+  function handleMouseMove(e) {
+    moveZipper(e.clientX);
+  }
+
+  function handleTouchMove(e) {
+    const touchX = e.touches[0].clientX; // Get x-coordinate of the first touch
+    moveZipper(touchX);
+  }
+
+  // Event listeners for both mouse and touch
+  document.addEventListener('mousemove', handleMouseMove);
+  document.addEventListener('touchmove', handleTouchMove);
 </script>
 </body>
 </html>
